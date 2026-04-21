@@ -16,5 +16,6 @@ The code is prepared in such manner that can be launched from the terminal given
 
 -c = The amount of cores to the software to use. The default is 100 as it is the amount i have available, if not specified it will use all cores. For testing your hardware, use one core first for small amount of qubits and see how much time it takes
 
+The results are given in the file "distributed_tomography_data.txt" and the data is easily readable for its analysis and use.
 # Trobuleshooting
 If the program gives you an error about memory usage then the problem is in the parameters of cores and states (-c -e), to solve it, it is prefered that for great amounts of cores the amount of states is the same (cores=states) (This problem emerges because the qiskit circuits for all those states are saved in memory to make the software faster and the paralelization doesnt reference this memory, instead it creates new ones. Because i wasn't really in needing of solving this, i simply didnt)
