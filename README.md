@@ -6,7 +6,7 @@ The code presented is used for the distributed tomography protocol, it requires 
 # How to use
 The code is prepared in such manner that can be launched from the terminal given the rights arguments (argparse).
 
--q = The total amount of qubits that the simulation (its a narg argument, this means you can put more than just one value into the argument and it will be calculated)(It automatically does every partition possible for that amount)
+-q = The total amount of qubits for the simulation (its a narg argument, this means you can put more than just one value into the argument and it will be accepted)(It automatically does every partition possible for that amount in the case of non noise)
 
 -s = The total shots for which the simulation will be done (narg)
 
