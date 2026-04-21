@@ -5,10 +5,15 @@ The code presented is used for the distributed tomography protocol, it requires 
 
 # How to use
 The code is prepared in such manner that can be launched from the terminal given the rights arguments (argparse).
+
 -q = The total amount of qubits that the simulation (its a narg argument, this means you can put more than just one value into the argument and it will be calculated)(It automatically does every partition possible for that amount)
+
 -s = The total shots for which the simulation will be done (narg)
+
 -e = The amount of states to be done to have a good statistical analisis
+
 -n = The noise of the simulation (This is automatically done just in the middle for bipartites to simplify)(default = 0 and if it is zero then run the non noise model)
+
 -c = The amount of cores to the software to use. The default is 100 as it is the amount i have available, if not specified it will use all cores. For testing your hardware, use one core first for small amount of qubits and see how much time it takes
 
 # Trobuleshooting
