@@ -35,7 +35,7 @@ from itertools import product
 import ast
 
 import multiprocessing
-from joblib import Parallel, delayed
+from joblib import Parallel, delayed, dump, load
 
 import argparse
 
@@ -614,7 +614,7 @@ def GenerateRandomCircuit(depth, input_circuit ,random=True, noise = False):
     
     if random == True:
         qc_random = input_circuit
-        add_random_haar_gates(qc_random) 
+        #add_random_haar_gates(qc_random) 
     else:
         qc_random = QuantumCircuit(QubitsN)
         qc_random.h(0)
@@ -721,11 +721,13 @@ def NegativityOfDensityMatrix(rho, qubits, small):
 def ParallelStates(qq):
     #profundidad = 3*QubitsN
 
+
     if lambda_noise != 0:
         tomo, qc, random_qc = GenerateRandomCircuit(profundidad, circuitos_r[qq],False)
     else:
         tomo, qc, random_qc = GenerateRandomCircuit(profundidad, circuitos_r[qq], True)
-    
+   
+    #print(tomo[-1])
     
     circ_density=random_qc.copy()
     circ_density.save_density_matrix()
@@ -788,7 +790,6 @@ def ParallelStates(qq):
     
         tomo = transpile(tomo, coupling_map=coupling_map,basis_gates=noise_model.basis_gates, initial_layout=list(range(QubitsN)))
         #tomo = transpile(tomo, basis_gates=noise_model.basis_gates)
-        #print(tomo)
         sampler = SamplerV1(backend_options=dict(noise_model=noise_model))
         job = sampler.run(tomo, shots=tiros/forshots)
         probs_dicts = job.result().quasi_dists
@@ -878,6 +879,11 @@ def random_clifford(rng: np.random.Generator | None = None) -> np.ndarray:
         rng = np.random.default_rng()
 
     return CLIFFORDS[rng.integers(0, 24)]
+
+def createCircuit(): #This function only exist to avoid the memory usage that happens after paralelization
+    circuit = QuantumCircuit(QubitsN)
+    
+    return circuit
 
 
 stored_sistem_distribution = []
@@ -973,10 +979,14 @@ for bb in range(len(qubitsCombinations)):
     circuitos_r = []
     for pp in range(NumberOfStates):
         circuitos_r.append(QuantumCircuit(QubitsN))
-    
+        add_random_haar_gates(circuitos_r[pp])
         #circuitos_r.append(GenerateHaar(QubitsN))
-    
-    
+    #circuitos_r = np.array(circuitos_r) 
+    #dump(circuitos_r, "circuitos.mmap")
+
+    #circuitos_shared = load("circuitos.mmap", mmap_mode ='r')
+
+
     #Lo que esta aqui abajo es para activar circuitos random de clifford
     #circuitos_r = [QuantumCircuit(QubitsN) for hh in range(NumberOfStates)]
     #for pp in range(NumberOfStates):
@@ -1073,7 +1083,7 @@ for bb in range(len(qubitsCombinations)):
         #profundidad = 3*QubitsN
         #circuitos_r = [random_circuit(QubitsN, profundidad) for hh in range(NumberOfStates)]
 
-        resultados_tomo = Parallel(n_jobs=cores)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
+        resultados_tomo = Parallel(n_jobs=cores,prefer="threads",max_nbytes=None)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
         
         theory_negativity = [r[0] for r in resultados_tomo]
         negatividades = [r[1] for r in resultados_tomo]
