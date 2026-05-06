@@ -3,6 +3,10 @@ Code to run distributed quantum tomography via MUBs (arXiv:2604.09775)
 
 The code presented is used for the distributed tomography protocol, it requires Qiskit as a main dependency.
 
+# Description
+The program delivers the statistical properties of the distributed computing protocol via MUBs, it has different functions to make this procedure more friendly and editable, only the part after the functions is the code running with the given parameters. If you want to edit certain parts of the procedure, find the desire function and edit it. Hopefully i will separate the function part with the code part in the near future.
+
+
 # How to use
 The code is prepared in such manner that can be launched from the terminal given the rights arguments (argparse).
 
@@ -17,5 +21,3 @@ The code is prepared in such manner that can be launched from the terminal given
 -c = The amount of cores to the software to use. The default is 100 as it is the amount i have available, if not specified it will use all cores. For testing your hardware, use one core first for small amount of qubits and see how much time it takes
 
 The results are given in the file "distributed_tomography_data.txt" and the data is easily readable for its analysis and use.
-# Trobuleshooting
-If the program gives you an error about memory usage then the problem is in the parameters of cores and states (-c -e), to solve it, it is prefered that for great amounts of cores the amount of states is the same (cores=states) (This problem emerges because the qiskit circuits for all those states are saved in memory to make the software faster and the paralelization doesnt reference this memory, instead it creates new ones. Because i wasn't really in needing of solving this, i simply didnt)
