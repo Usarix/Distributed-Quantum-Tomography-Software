@@ -21,3 +21,7 @@ The code is prepared in such manner that can be launched from the terminal given
 -c = The amount of cores to the software to use. The default is 100 as it is the amount i have available, if not specified it will use all cores. For testing your hardware, use one core first for small amount of qubits and see how much time it takes
 
 The results are given in the file "distributed_tomography_data.txt" and the data is easily readable for its analysis and use.
+
+# Troubleshooting
+
+If you end up with an error about memory use is because the number of cores is too high for your available memory. I suggest try with less or with the same in the case it manages to barely get the memory needed.
