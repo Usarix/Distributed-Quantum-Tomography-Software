@@ -1083,7 +1083,7 @@ for bb in range(len(qubitsCombinations)):
         #profundidad = 3*QubitsN
         #circuitos_r = [random_circuit(QubitsN, profundidad) for hh in range(NumberOfStates)]
 
-        resultados_tomo = Parallel(n_jobs=cores,prefer="threads",max_nbytes=None)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
+        resultados_tomo = Parallel(n_jobs=cores,prefer="loky",max_nbytes=None)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
         
         theory_negativity = [r[0] for r in resultados_tomo]
         negatividades = [r[1] for r in resultados_tomo]
