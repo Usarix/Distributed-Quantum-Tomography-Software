@@ -936,7 +936,12 @@ def Partition(numbers, just_3_cases = False):
     return all_partitions
 
 
-qubitsCombinations = Partition(args.qubits, False)   ##True es el caso especial (Completa,mitad,full distribuida), False para que sean TODAS las particiones
+lambda_noise = args.noise
+flag_combinations = False
+if lambda_noise != 0:
+    flag_combinations = True
+
+qubitsCombinations = Partition(args.qubits, flag_combinations)   ##True es el caso especial (Completa,mitad,full distribuida), False para que sean TODAS las particiones
 
 #qubitsCombinations = [terminos for terminos in qubitsCombinations if len(terminos) == 2]
 
@@ -955,7 +960,6 @@ for qq in range(len(qubitsCombinations)):
 
 shotsperWholeSystem = args.shots
 NumberOfStates = args.states
-lambda_noise = args.noise
 cores = args.cores
 
 print(qubitsCombinations,shotsperWholeSystem,NumberOfStates)
@@ -978,9 +982,9 @@ for bb in range(len(qubitsCombinations)):
     
     circuitos_r = []
     for pp in range(NumberOfStates):
-        circuitos_r.append(QuantumCircuit(QubitsN))
-        add_random_haar_gates(circuitos_r[pp])
-        #circuitos_r.append(GenerateHaar(QubitsN))
+        #circuitos_r.append(QuantumCircuit(QubitsN))
+        #add_random_haar_gates(circuitos_r[pp])                  #NOT TRUE HAAR RANDOM
+        circuitos_r.append(GenerateHaar(QubitsN))              #TRUE HAAR RANDOM
     #circuitos_r = np.array(circuitos_r) 
     #dump(circuitos_r, "circuitos.mmap")
 
@@ -1083,7 +1087,7 @@ for bb in range(len(qubitsCombinations)):
         #profundidad = 3*QubitsN
         #circuitos_r = [random_circuit(QubitsN, profundidad) for hh in range(NumberOfStates)]
 
-        resultados_tomo = Parallel(n_jobs=cores,prefer="loky",max_nbytes=None)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
+        resultados_tomo = Parallel(n_jobs=cores,backend="loky",max_nbytes=None)(delayed(ParallelStates)(qq) for qq in range(NumberOfStates))
         
         theory_negativity = [r[0] for r in resultados_tomo]
         negatividades = [r[1] for r in resultados_tomo]
